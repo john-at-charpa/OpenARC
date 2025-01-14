@@ -5201,6 +5201,18 @@ main(int argc, char **argv)
         syslog(LOG_INFO, "%s v%s starting (%s)", ARCF_PRODUCT, VERSION, argstr);
     }
 
+    /* chown the milter socket to the same UID/GID as the daemon */
+    if (sock)
+    {
+        char *r = strchr(sock, ':');
+        char *spath = r + 1;
+        if ((*spath = '/') && chown(spath, pw->pw_uid, gid) != 0)
+        {
+            syslog(LOG_ERR, "chown %s to %u : %u failed - %s", spath,
+                             pw->pw_uid, gid, strerror(errno));
+        }
+    }
+
     /* spawn the SIGUSR1 handler */
     status = pthread_create(&rt, NULL, arcf_reloader, NULL);
     if (status != 0)
