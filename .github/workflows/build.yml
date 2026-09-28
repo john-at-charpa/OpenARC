@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-26.04
     steps:
       - name: Check out code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Lint code formatting
         run: |
@@ -17,10 +17,10 @@ jobs:
           git status --porcelain | grep -q '^ M' && exit 1 || exit 0
 
   ruff:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     steps:
       - name: Check out code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Install flake8
         run: sudo pip install ruff
@@ -35,10 +35,10 @@ jobs:
           git status --porcelain | grep -q '^ M' && exit 1 || exit 0
 
   check:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     steps:
       - name: Check out code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: apt update
         run: sudo apt update
@@ -47,17 +47,16 @@ jobs:
         run: sudo apt install libbsd-dev libidn2-dev libjansson-dev libmail-dkim-perl libmilter-dev libssl-dev
 
       - name: Set up Python
-        uses: actions/setup-python@v6
+        uses: actions/setup-python@v7
         with:
-          # 3.8 is listed last because it's the lowest version we support,
+          # 3.10 is listed last because it's the lowest version we support,
           # so we want to use it as the default.
           python-version: |
-            3.9
-            3.10
             3.11
             3.12
             3.13
-            3.8
+            3.14
+            3.10
 
       - name: Install Python dependencies
         run: sudo pip install pytest miltertest inline_snapshot dkimpy[ARC] dirty_equals

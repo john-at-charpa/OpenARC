@@ -60,7 +60,7 @@ you will also need:
 The core OpenARC software will function without it, but tools distributed
 alongside OpenARC (such as `openarc-keygen`) may require:
 
-* Python >= 3.8
+* Python >= 3.10
 
 Compatibility with older versions of Python 3 has not been
 deliberately broken, but this is the oldest version we test against.
@@ -114,7 +114,7 @@ influence the build by running `./configure --help`.
 
 Tests can be run with `make check`. OpenARC's test suite requires:
 
-* Python >= 3.8
+* Python >= 3.10
 * [pytest](https://pytest.org)
 * [dirty-equals](https://github.com/samuelcolvin/dirty-equals)
 * [inline-snapshot](https://15r10nk.github.io/inline-snapshot/)

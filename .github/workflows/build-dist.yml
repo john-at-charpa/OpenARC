@@ -5,10 +5,10 @@ on:
       - v*
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     steps:
       - name: Check out code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           path: openarc
           fetch-depth: 0
@@ -27,7 +27,7 @@ jobs:
         working-directory: ${{ github.workspace }}/openarc
 
       - name: Save dist files
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: dist
           path: ${{ github.workspace }}/openarc/openarc-*

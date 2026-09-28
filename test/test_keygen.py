@@ -10,13 +10,11 @@ import pytest
     'python_version',
     [
         'python3',
-        'python3.7',
-        'python3.8',
-        'python3.9',
         'python3.10',
         'python3.11',
         'python3.12',
         'python3.13',
+        'python3.14',
     ],
 )
 def test_keygen(tool_path, tmp_path, python_version):
