@@ -2062,6 +2062,11 @@ arc_parse_canon_t(char *tag, arc_canon_t *hdr_canon, arc_canon_t *body_canon)
     }
 
     token = strtok_r(tag, "/", &last);
+    if (token == NULL)
+    {
+        return ARC_STAT_INVALID;
+    }
+
     code = arc_name_to_code(canonicalizations, token);
 
     if (code == -1)
