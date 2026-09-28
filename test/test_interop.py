@@ -59,7 +59,10 @@ def test_dkimpy_sign(run_miltertest, private_key, dkimpy):
             ],
             [
                 'ARC-Authentication-Results',
-                ' i=2; example.com; \n\tarc=pass header.oldest-pass=0 smtp.remote-ip=127.0.0.1',
+                """\
+ i=2; example.com; \n\
+	arc=pass header.oldest-pass=0 smtp.remote-ip=127.0.0.1\
+""",
             ],
         ]
     )
@@ -133,7 +136,10 @@ def test_perl_sign(run_miltertest, private_key, perl_mail_dkim):
             ],
             [
                 'ARC-Authentication-Results',
-                ' i=2; example.com; \n\tarc=pass header.oldest-pass=0 smtp.remote-ip=127.0.0.1',
+                """\
+ i=2; example.com; \n\
+	arc=pass header.oldest-pass=0 smtp.remote-ip=127.0.0.1\
+""",
             ],
         ]
     )

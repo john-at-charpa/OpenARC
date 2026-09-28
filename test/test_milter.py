@@ -23,7 +23,10 @@ def test_milter_basic(run_miltertest):
             ],
             [
                 'ARC-Authentication-Results',
-                ' i=1; example.com; \n\tarc=none smtp.remote-ip=127.0.0.1',
+                """\
+ i=1; example.com; \n\
+	arc=none smtp.remote-ip=127.0.0.1\
+""",
             ],
         ]
     )
@@ -45,7 +48,10 @@ def test_milter_v2(run_miltertest):
             ],
             [
                 'ARC-Authentication-Results',
-                'i=1; example.com; \n\tarc=none smtp.remote-ip=127.0.0.1',
+                """\
+i=1; example.com; \n\
+	arc=none smtp.remote-ip=127.0.0.1\
+""",
             ],
         ]
     )
@@ -66,7 +72,10 @@ def test_milter_canon_simple(run_miltertest):
             ],
             [
                 'ARC-Authentication-Results',
-                ' i=1; example.com; \n\tarc=none smtp.remote-ip=127.0.0.1',
+                """\
+ i=1; example.com; \n\
+	arc=none smtp.remote-ip=127.0.0.1\
+""",
             ],
         ]
     )
@@ -84,7 +93,10 @@ def test_milter_canon_simple(run_miltertest):
             ],
             [
                 'ARC-Authentication-Results',
-                ' i=2; example.com; \n\tarc=pass header.oldest-pass=0 smtp.remote-ip=127.0.0.1',
+                """\
+ i=2; example.com; \n\
+	arc=pass header.oldest-pass=0 smtp.remote-ip=127.0.0.1\
+""",
             ],
         ]
     )
@@ -135,7 +147,10 @@ def test_milter_mode_s(run_miltertest):
             ],
             [
                 'ARC-Authentication-Results',
-                ' i=1; example.com; \n\tarc=none smtp.remote-ip=127.0.0.1',
+                """\
+ i=1; example.com; \n\
+	arc=none smtp.remote-ip=127.0.0.1\
+""",
             ],
         ]
     )
@@ -153,7 +168,10 @@ def test_milter_mode_s(run_miltertest):
             ],
             [
                 'ARC-Authentication-Results',
-                ' i=2; example.com; \n\tarc=pass header.oldest-pass=0 smtp.remote-ip=127.0.0.1',
+                """\
+ i=2; example.com; \n\
+	arc=pass header.oldest-pass=0 smtp.remote-ip=127.0.0.1\
+""",
             ],
         ]
     )
@@ -218,7 +236,10 @@ def test_milter_mode_none_sign(run_miltertest):
             ],
             [
                 'ARC-Authentication-Results',
-                ' i=1; example.com; \n\tarc=none smtp.remote-ip=127.0.0.1',
+                """\
+ i=1; example.com; \n\
+	arc=none smtp.remote-ip=127.0.0.1\
+""",
             ],
         ]
     )
@@ -239,10 +260,10 @@ def test_milter_mode_none_sign(run_miltertest):
             ],
             snapshot("""\
  i=1; example.com; \n\
-\tiprev=pass policy.iprev=192.0.2.1 (mail.example.com);
-\tspf=pass (domain of foo@example.com designates 192.0.2.1 as permitted sender);
-\tdkim=pass header.i=@example.com header.s=foo;
-\tarc=none smtp.remote-ip=127.0.0.1\
+	iprev=pass policy.iprev=192.0.2.1 (mail.example.com);
+	spf=pass (domain of foo@example.com designates 192.0.2.1 as permitted sender);
+	dkim=pass header.i=@example.com header.s=foo;
+	arc=none smtp.remote-ip=127.0.0.1\
 """),
         ],
         # Multiple headers
@@ -254,10 +275,10 @@ def test_milter_mode_none_sign(run_miltertest):
             ],
             snapshot("""\
  i=1; example.com; \n\
-\tiprev=pass policy.iprev=192.0.2.1 (mail.example.com);
-\tspf=pass (domain of foo@example.com designates 192.0.2.1 as permitted sender);
-\tdkim=pass header.i=@example.com header.s=foo;
-\tarc=none smtp.remote-ip=127.0.0.1\
+	iprev=pass policy.iprev=192.0.2.1 (mail.example.com);
+	spf=pass (domain of foo@example.com designates 192.0.2.1 as permitted sender);
+	dkim=pass header.i=@example.com header.s=foo;
+	arc=none smtp.remote-ip=127.0.0.1\
 """),
         ],
         # Multiple headers for the same method
@@ -267,12 +288,20 @@ def test_milter_mode_none_sign(run_miltertest):
                 'example.com; spf=fail',
                 'example.com; spf=none',
             ],
-            snapshot(' i=1; example.com; \n\tspf=pass;\n\tarc=none smtp.remote-ip=127.0.0.1'),
+            snapshot("""\
+ i=1; example.com; \n\
+	spf=pass;
+	arc=none smtp.remote-ip=127.0.0.1\
+"""),
         ],
         # Same method multiple times
         [
             ['example.com; spf=pass; spf=fail; spf=none'],
-            snapshot(' i=1; example.com; \n\tspf=pass;\n\tarc=none smtp.remote-ip=127.0.0.1'),
+            snapshot("""\
+ i=1; example.com; \n\
+	spf=pass;
+	arc=none smtp.remote-ip=127.0.0.1\
+"""),
         ],
         # Header with more results than we're willing to store
         [
@@ -302,23 +331,23 @@ def test_milter_mode_none_sign(run_miltertest):
             ],
             snapshot("""\
  i=1; example.com; \n\
-\tdkim=pass header.i=@example.com header.s=foo;
-\tdkim=pass header.i=@example.com header.s=bar;
-\tdkim=pass header.i=@example.com header.s=baz;
-\tdkim=pass header.i=@example.com header.s=qux;
-\tdkim=pass header.i=@example.com header.s=quux;
-\tdkim=pass header.i=@example.com header.s=quuux;
-\tdkim=fail header.i=@example.com header.s=foo;
-\tdkim=fail header.i=@example.com header.s=bar;
-\tdkim=fail header.i=@example.com header.s=baz;
-\tdkim=fail header.i=@example.com header.s=qux;
-\tdkim=fail header.i=@example.com header.s=quux;
-\tdkim=fail header.i=@example.com header.s=quuux;
-\tdkim=policy header.i=@example.com header.s=foo;
-\tdkim=policy header.i=@example.com header.s=bar;
-\tdkim=policy header.i=@example.com header.s=baz;
-\tdkim=policy header.i=@example.com header.s=qux;
-\tarc=none smtp.remote-ip=127.0.0.1\
+	dkim=pass header.i=@example.com header.s=foo;
+	dkim=pass header.i=@example.com header.s=bar;
+	dkim=pass header.i=@example.com header.s=baz;
+	dkim=pass header.i=@example.com header.s=qux;
+	dkim=pass header.i=@example.com header.s=quux;
+	dkim=pass header.i=@example.com header.s=quuux;
+	dkim=fail header.i=@example.com header.s=foo;
+	dkim=fail header.i=@example.com header.s=bar;
+	dkim=fail header.i=@example.com header.s=baz;
+	dkim=fail header.i=@example.com header.s=qux;
+	dkim=fail header.i=@example.com header.s=quux;
+	dkim=fail header.i=@example.com header.s=quuux;
+	dkim=policy header.i=@example.com header.s=foo;
+	dkim=policy header.i=@example.com header.s=bar;
+	dkim=policy header.i=@example.com header.s=baz;
+	dkim=policy header.i=@example.com header.s=qux;
+	arc=none smtp.remote-ip=127.0.0.1\
 """),
         ],
         # Non-matching authserv-id
@@ -328,17 +357,28 @@ def test_milter_mode_none_sign(run_miltertest):
                 'otheradmd.example.com; spf=tempfail',
                 'example.net; spf=permfail',
             ],
-            snapshot(' i=1; example.com; \n\tarc=none smtp.remote-ip=127.0.0.1'),
+            snapshot("""\
+ i=1; example.com; \n\
+	arc=none smtp.remote-ip=127.0.0.1\
+"""),
         ],
         # CFWS
         [
             ['example.com; (a)spf (Sender Policy Framework) = pass (good) smtp (mail transfer) . (protocol) mailfrom = foo@example.com;'],
-            snapshot(' i=1; example.com; \n\tspf=pass (good) smtp.mailfrom=foo@example.com;\n\tarc=none smtp.remote-ip=127.0.0.1'),
+            snapshot("""\
+ i=1; example.com; \n\
+	spf=pass (good) smtp.mailfrom=foo@example.com;
+	arc=none smtp.remote-ip=127.0.0.1\
+"""),
         ],
         # Unknown method
         [
             ['example.com; spf=pass; superspf=pass; arc=pass; superarc=fail policy.krypton=foo;'],
-            snapshot(' i=1; example.com; \n\tspf=pass;\n\tarc=pass'),
+            snapshot("""\
+ i=1; example.com; \n\
+	spf=pass;
+	arc=pass\
+"""),
         ],
         # Unknown ptype
         [
@@ -346,20 +386,30 @@ def test_milter_mode_none_sign(run_miltertest):
                 'example.com; spf=pass imap.override=true',
                 'example.com; spf=pass; iprev=pass dnssec.signed=true',
             ],
-            snapshot(' i=1; example.com; \n\tarc=none smtp.remote-ip=127.0.0.1'),
+            snapshot("""\
+ i=1; example.com; \n\
+	arc=none smtp.remote-ip=127.0.0.1\
+"""),
         ],
         # reason
         [
             ['example.com; spf=pass (ip4)reason="192.0.2.1 matched ip4:192.0.2.0/27 in _spf.example.com"; dmarc=pass'],
             snapshot(
-                ' i=1; example.com; \n\tspf=pass reason="192.0.2.1 matched ip4:192.0.2.0/27 in _spf.example.com" (ip4);\n\tdmarc=pass;'
-                '\n\tarc=none smtp.remote-ip=127.0.0.1'
+                """\
+ i=1; example.com; \n\
+	spf=pass reason="192.0.2.1 matched ip4:192.0.2.0/27 in _spf.example.com" (ip4);
+	dmarc=pass;
+	arc=none smtp.remote-ip=127.0.0.1\
+"""
             ),
         ],
         # misplaced reason
         [
             ['example.com; spf=pass; iprev=pass policy.iprev=192.0.2.1 reason="because"'],
-            snapshot(' i=1; example.com; \n\tarc=none smtp.remote-ip=127.0.0.1'),
+            snapshot("""\
+ i=1; example.com; \n\
+	arc=none smtp.remote-ip=127.0.0.1\
+"""),
         ],
         # no-result
         [
@@ -368,7 +418,10 @@ def test_milter_mode_none_sign(run_miltertest):
                 'example.com; none; spf=pass',
                 'example.com; spf=fail; none',
             ],
-            snapshot(' i=1; example.com; \n\tarc=none smtp.remote-ip=127.0.0.1'),
+            snapshot("""\
+ i=1; example.com; \n\
+	arc=none smtp.remote-ip=127.0.0.1\
+"""),
         ],
         # truncations
         [
@@ -385,7 +438,10 @@ def test_milter_mode_none_sign(run_miltertest):
                 'example.com; dmarc=pass; iprev=pass policy.iprev="1" (',
                 'example.com; dmarc=pass; iprev=pass policy.iprev="1" ( a c',
             ],
-            snapshot(' i=1; example.com; \n\tarc=none smtp.remote-ip=127.0.0.1'),
+            snapshot("""\
+ i=1; example.com; \n\
+	arc=none smtp.remote-ip=127.0.0.1\
+"""),
         ],
         # bad sequences
         [
@@ -395,20 +451,30 @@ def test_milter_mode_none_sign(run_miltertest):
                 'example.com; dmarc=pass; iprev=pass policy=iprev=192.0.2.1',
                 'example.com; dmarc=pass reason "because";',
             ],
-            snapshot(' i=1; example.com; \n\tarc=none smtp.remote-ip=127.0.0.1'),
+            snapshot("""\
+ i=1; example.com; \n\
+	arc=none smtp.remote-ip=127.0.0.1\
+"""),
         ],
         # RFC 8904
         [
             ['example.com; dnswl=pass dns.zone=accept.example.com policy.ip=192.0.2.1 policy.txt="sure, yeah" dns.sec=yes'],
             snapshot(
-                ' i=1; example.com; \n\tdnswl=pass dns.zone=accept.example.com policy.ip=192.0.2.1 policy.txt="sure, yeah" dns.sec=yes;'
-                '\n\tarc=none smtp.remote-ip=127.0.0.1'
+                """\
+ i=1; example.com; \n\
+	dnswl=pass dns.zone=accept.example.com policy.ip=192.0.2.1 policy.txt="sure, yeah" dns.sec=yes;
+	arc=none smtp.remote-ip=127.0.0.1\
+"""
             ),
         ],
         # quoted-string
         [
             ['example.com; auth=pass smtp.auth="花木蘭\\"\\\\ []"'],
-            snapshot(' i=1; example.com; \n\tauth=pass smtp.auth="花木蘭\\"\\\\ []";\n\tarc=none smtp.remote-ip=127.0.0.1'),
+            snapshot("""\
+ i=1; example.com; \n\
+	auth=pass smtp.auth="花木蘭\\"\\\\ []";
+	arc=none smtp.remote-ip=127.0.0.1\
+"""),
         ],
         # version
         [
@@ -416,7 +482,12 @@ def test_milter_mode_none_sign(run_miltertest):
                 'example.com 1; spf=pass',
                 'example.com 1 ; dmarc=pass',
             ],
-            snapshot(' i=1; example.com; \n\tspf=pass;\n\tdmarc=pass;\n\tarc=none smtp.remote-ip=127.0.0.1'),
+            snapshot("""\
+ i=1; example.com; \n\
+	spf=pass;
+	dmarc=pass;
+	arc=none smtp.remote-ip=127.0.0.1\
+"""),
         ],
         # invalid version
         [
@@ -425,7 +496,10 @@ def test_milter_mode_none_sign(run_miltertest):
                 'example.com a; spf=pass',
                 'example.com 1 1; spf=pass',
             ],
-            snapshot(' i=1; example.com; \n\tarc=none smtp.remote-ip=127.0.0.1'),
+            snapshot("""\
+ i=1; example.com; \n\
+	arc=none smtp.remote-ip=127.0.0.1\
+"""),
         ],
     ],
 )
@@ -448,7 +522,11 @@ def test_milter_authrescomments(run_miltertest):
     assert res['headers'][3] == snapshot(
         [
             'ARC-Authentication-Results',
-            ' i=1; example.com; \n\tspf=pass smtp.mailfrom=foo@example.com;\n\tarc=none smtp.remote-ip=127.0.0.1',
+            """\
+ i=1; example.com; \n\
+	spf=pass smtp.mailfrom=foo@example.com;
+	arc=none smtp.remote-ip=127.0.0.1\
+""",
         ]
     )
 
@@ -475,7 +553,10 @@ def test_milter_ar_override(run_miltertest):
             ],
             [
                 'ARC-Authentication-Results',
-                ' i=2; example.com; \n\tarc=fail',
+                """\
+ i=2; example.com; \n\
+	arc=fail\
+""",
             ],
         ]
     )
@@ -511,7 +592,10 @@ def test_milter_ar_override_disabled(run_miltertest):
             ],
             [
                 'ARC-Authentication-Results',
-                ' i=2; example.com; \n\tarc=pass header.oldest-pass=0 smtp.remote-ip=127.0.0.1',
+                """\
+ i=2; example.com; \n\
+	arc=pass header.oldest-pass=0 smtp.remote-ip=127.0.0.1\
+""",
             ],
         ]
     )
@@ -540,7 +624,45 @@ def test_milter_ar_override_multi(run_miltertest):
             ],
             [
                 'ARC-Authentication-Results',
-                ' i=2; example.com; \n\tarc=pass',
+                """\
+ i=2; example.com; \n\
+	arc=pass\
+""",
+            ],
+        ]
+    )
+
+
+def test_milter_ar_override_invalid(run_miltertest):
+    """A malformed chain shouldn't crash the milter"""
+
+    # FIXME: it would be better if a structurally invalid chain couldn't have
+    # the result overridden at all, but avoiding the crash is an easy band-aid.
+
+    res = run_miltertest()
+
+    headers = [
+        ['Authentication-Results', 'example.com; arc=pass'],
+        *[x for x in res['headers'] if x[0] not in ['Authentication-Results', 'ARC-Message-Signature']],
+    ]
+    res = run_miltertest(headers)
+    assert res['headers'] == snapshot(
+        [
+            ['Authentication-Results', ' example.com; arc=pass smtp.remote-ip=127.0.0.1'],
+            [
+                'ARC-Seal',
+                IsStr(regex=r' i=2; d=example\.com; s=elpmaxe; a=rsa-sha256; cv=pass; t=1234567890;\s+(?s:.+)'),
+            ],
+            [
+                'ARC-Message-Signature',
+                IsStr(regex=r' i=2; d=example\.com; s=elpmaxe; a=rsa-sha256;\s+c=relaxed/simple; t=1234567890;\s+h=From:Date:Subject;\s+(?s:.+)'),
+            ],
+            [
+                'ARC-Authentication-Results',
+                """\
+ i=2; example.com; \n\
+	arc=pass\
+""",
             ],
         ]
     )
@@ -583,7 +705,10 @@ def test_milter_duplicate_header(run_miltertest):
             ],
             [
                 'ARC-Authentication-Results',
-                ' i=2; example.com; \n\tarc=fail smtp.remote-ip=127.0.0.1',
+                """\
+ i=2; example.com; \n\
+	arc=fail smtp.remote-ip=127.0.0.1\
+""",
             ],
         ]
     )
@@ -605,7 +730,11 @@ def test_milter_idna(run_miltertest):
             ],
             [
                 'ARC-Authentication-Results',
-                ' i=1; 시험.example.com; \n\tspf=pass smtp.mailfrom=привіт@시험.example.com;\n\tarc=none smtp.remote-ip=127.0.0.1',
+                """\
+ i=1; 시험.example.com; \n\
+	spf=pass smtp.mailfrom=привіт@시험.example.com;
+	arc=none smtp.remote-ip=127.0.0.1\
+""",
             ],
         ]
     )
@@ -623,7 +752,10 @@ def test_milter_idna(run_miltertest):
             ],
             [
                 'ARC-Authentication-Results',
-                ' i=2; 시험.example.com; \n\tarc=pass header.oldest-pass=0 smtp.remote-ip=127.0.0.1',
+                """\
+ i=2; 시험.example.com; \n\
+	arc=pass header.oldest-pass=0 smtp.remote-ip=127.0.0.1\
+""",
             ],
         ]
     )
@@ -652,7 +784,10 @@ def test_milter_oldest_pass(run_miltertest):
             ],
             [
                 'ARC-Authentication-Results',
-                ' i=2; example.com; \n\tarc=pass smtp.remote-ip=127.0.0.1',
+                """\
+ i=2; example.com; \n\
+	arc=pass smtp.remote-ip=127.0.0.1\
+""",
             ],
         ]
     )
@@ -674,7 +809,10 @@ def test_milter_oldest_pass(run_miltertest):
             ],
             [
                 'ARC-Authentication-Results',
-                ' i=3; example.com; \n\tarc=pass header.oldest-pass=2 smtp.remote-ip=127.0.0.1',
+                """\
+ i=3; example.com; \n\
+	arc=pass header.oldest-pass=2 smtp.remote-ip=127.0.0.1\
+""",
             ],
         ]
     )
@@ -696,7 +834,10 @@ def test_milter_authresip(run_miltertest):
             ],
             [
                 'ARC-Authentication-Results',
-                ' i=1; example.com; \n\tarc=none',
+                """\
+ i=1; example.com; \n\
+	arc=none\
+""",
             ],
         ]
     )
@@ -721,7 +862,10 @@ def test_milter_finalreceiver(run_miltertest):
             ],
             [
                 'ARC-Authentication-Results',
-                ' i=3; example.com; \n\tarc=pass smtp.remote-ip=127.0.0.1',
+                """\
+ i=3; example.com; \n\
+	arc=pass smtp.remote-ip=127.0.0.1\
+""",
             ],
         ]
     )
@@ -749,7 +893,10 @@ def test_milter_minimum_key_bits(run_miltertest):
             ],
             [
                 'ARC-Authentication-Results',
-                ' i=2; example.com; \n\tarc=pass header.oldest-pass=0 smtp.remote-ip=127.0.0.1',
+                """\
+ i=2; example.com; \n\
+	arc=pass header.oldest-pass=0 smtp.remote-ip=127.0.0.1\
+""",
             ],
         ]
     )
@@ -771,7 +918,10 @@ def test_milter_minimum_key_bits_fail(run_miltertest):
             ],
             [
                 'ARC-Authentication-Results',
-                ' i=2; example.com; \n\tarc=fail smtp.remote-ip=127.0.0.1',
+                """\
+ i=2; example.com; \n\
+	arc=fail smtp.remote-ip=127.0.0.1\
+""",
             ],
         ]
     )
@@ -812,7 +962,10 @@ def test_milter_signaturettl(run_miltertest):
             ],
             [
                 'ARC-Authentication-Results',
-                ' i=1; example.com; \n\tarc=none smtp.remote-ip=127.0.0.1',
+                """\
+ i=1; example.com; \n\
+	arc=none smtp.remote-ip=127.0.0.1\
+""",
             ],
         ]
     )
@@ -831,7 +984,10 @@ def test_milter_signaturettl(run_miltertest):
             ],
             [
                 'ARC-Authentication-Results',
-                ' i=2; example.com; \n\tarc=pass header.oldest-pass=0 smtp.remote-ip=127.0.0.1',
+                """\
+ i=2; example.com; \n\
+	arc=pass header.oldest-pass=0 smtp.remote-ip=127.0.0.1\
+""",
             ],
         ]
     )
@@ -850,7 +1006,10 @@ def test_milter_signaturettl(run_miltertest):
             ],
             [
                 'ARC-Authentication-Results',
-                ' i=2; example.com; \n\tarc=fail smtp.remote-ip=127.0.0.1',
+                """\
+ i=2; example.com; \n\
+	arc=fail smtp.remote-ip=127.0.0.1\
+""",
             ],
         ]
     )
@@ -874,7 +1033,10 @@ def test_milter_softwareheader(run_miltertest):
             ],
             [
                 'ARC-Authentication-Results',
-                ' i=1; example.com; \n\tarc=none smtp.remote-ip=127.0.0.1',
+                """\
+ i=1; example.com; \n\
+	arc=none smtp.remote-ip=127.0.0.1\
+""",
             ],
         ]
     )

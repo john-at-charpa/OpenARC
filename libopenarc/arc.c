@@ -3910,10 +3910,20 @@ arc_chain_custody_str(ARC_MESSAGE *msg, char *buf, size_t buflen)
 
     for (set = msg->arc_nsets - 1; set >= 0; set--)
     {
-        kvset = msg->arc_sets[set].arcset_ams->hdr_data;
-        str = arc_param_get(kvset, "d");
-        (void) arc_dstring_printf(tmpbuf, "%s%s",
-                                  (set < msg->arc_nsets - 1 ? ":" : ""), str);
+        str = NULL;
+        if (msg->arc_sets[set].arcset_ams != NULL)
+        {
+            kvset = msg->arc_sets[set].arcset_ams->hdr_data;
+            if (kvset != NULL)
+            {
+                str = arc_param_get(kvset, "d");
+            }
+        }
+        if (str != NULL)
+        {
+            (void) arc_dstring_printf(
+                tmpbuf, "%s%s", (set < msg->arc_nsets - 1 ? ":" : ""), str);
+        }
     }
 
     appendlen = snprintf(buf, buflen, "%s", arc_dstring_get(tmpbuf));
