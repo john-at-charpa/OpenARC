@@ -100,8 +100,8 @@ void arc_error(ARC_MESSAGE *, const char *, ...);
 static void
 arc_verror(ARC_MESSAGE *msg, const char *format, va_list ap)
 {
-    int flen;
-    int saverr;
+    int   flen;
+    int   saverr;
     char *new;
 
     assert(msg != NULL);

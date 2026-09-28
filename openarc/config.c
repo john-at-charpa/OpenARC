@@ -75,7 +75,7 @@ config_getline(FILE *in)
     int    c;
     size_t asize = BUFRSZ;
     size_t len = 0;
-    char *new = NULL;
+    char  *new = NULL;
 
     assert(in != NULL);
 
@@ -193,15 +193,15 @@ config_load_level(char             *file,
                   int               level,
                   char            **deprecated)
 {
-    int          n = -1;
-    int          err = 0;
-    unsigned int myline = 0;
-    int          value = -1;
-    FILE        *in;
-    char        *p;
-    char        *s;
-    char        *str = NULL;
-    char        *buf;
+    int            n = -1;
+    int            err = 0;
+    unsigned int   myline = 0;
+    int            value = -1;
+    FILE          *in;
+    char          *p;
+    char          *s;
+    char          *str = NULL;
+    char          *buf;
     struct config *new = NULL;
     struct config *cur = NULL;
 
@@ -320,7 +320,7 @@ config_load_level(char             *file,
                     }
                     else
                     {
-                        char *new;
+                        char  *new;
                         size_t oldlen;
                         size_t newlen;
 

@@ -2059,7 +2059,7 @@ static void
 arcf_config_reload(void)
 {
     struct arcf_config *new;
-    char errbuf[BUFRSZ + 1];
+    char                errbuf[BUFRSZ + 1];
 
     pthread_mutex_lock(&conf_lock);
 

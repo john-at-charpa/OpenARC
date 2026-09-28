@@ -277,12 +277,12 @@ arc_min_timeval(struct timeval  *t1,
 int
 arc_check_dns_reply(unsigned char *ansbuf, size_t anslen, int xclass, int xtype)
 {
-    bool     trunc = false;
-    int      qdcount;
-    int      ancount;
-    int      n;
-    uint16_t type = (uint16_t) -1;
-    uint16_t class = (uint16_t) -1;
+    bool           trunc = false;
+    int            qdcount;
+    int            ancount;
+    int            n;
+    uint16_t       type = (uint16_t) -1;
+    uint16_t       class = (uint16_t) -1;
     unsigned char *cp;
     unsigned char *eom;
     HEADER         hdr;

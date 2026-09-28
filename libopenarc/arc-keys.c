@@ -70,16 +70,16 @@ extern void arc_error(ARC_MESSAGE *, const char *, ...);
 ARC_STAT
 arc_get_key_dns(ARC_MESSAGE *msg, char *buf, size_t buflen)
 {
-    int status;
-    int qdcount;
-    int ancount;
-    int error;
-    int dnssec = ARC_DNSSEC_UNKNOWN;
-    int c;
-    int n = 0;
-    int rdlength = 0;
-    int type = -1;
-    int class = -1;
+    int            status;
+    int            qdcount;
+    int            ancount;
+    int            error;
+    int            dnssec = ARC_DNSSEC_UNKNOWN;
+    int            c;
+    int            n = 0;
+    int            rdlength = 0;
+    int            type = -1;
+    int            class = -1;
     size_t         anslen;
     void          *q;
     ARC_LIB       *lib;

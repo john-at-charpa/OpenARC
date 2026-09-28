@@ -43,7 +43,7 @@
 static bool
 arc_dstring_resize(struct arc_dstring *dstr, int len)
 {
-    int newsz;
+    int   newsz;
     char *new;
 
     assert(dstr != NULL);

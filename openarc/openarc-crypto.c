@@ -149,7 +149,7 @@ static struct CRYPTO_dynlock_value *
 arcf_crypto_dyn_create(/* UNUSED */ const char *file,
                        /* UNUSED */ int         line)
 {
-    int err;
+    int              err;
     pthread_mutex_t *new;
 
     new = ARC_MALLOC(sizeof(pthread_mutex_t));
