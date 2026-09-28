@@ -19,7 +19,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 * libopenarc - `arc_chain_custody_str()` crash when processing an invalid
-  ARC chain.
+  ARC chain that another service in our ADMD has declared to be valid.
 
 ## [1.3.0](https://github.com/flowerysong/OpenARC/releases/tag/v1.3.0) - 2025-10-29
 
