@@ -10,7 +10,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 
-## [1.3.1](https://github.com/flowerysong/OpenARC/releases/tag/v1.3.1) = 2026-09-28
+## [1.3.1](https://github.com/flowerysong/OpenARC/releases/tag/v1.3.1) - 2026-09-28
 
 ### Changed
 * tests - migrated from manual "snapshots" to `inline-snapshot`.
